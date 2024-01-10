@@ -12,6 +12,7 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = '(hbnb)'
+    lastcmd = ""
 
     def do_quit(self, arg):
         "Quit command to exit the program"
@@ -21,6 +22,9 @@ class HBNBCommand(cmd.Cmd):
         'Exits'
         print()
         return True
+    
+    def emptyline(self):
+        pass
 
 
 if __name__ == '__main__':
