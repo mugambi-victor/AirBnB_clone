@@ -6,6 +6,7 @@ form the prompt
 
 import cmd
 import models
+from models.user import User
 
 class HBNBCommand(cmd.Cmd):
     """
@@ -29,7 +30,7 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel, saves it, and prints the id."""
+        """Creates a new instance of BaseModel, saves it (to a JSON file), and prints the id."""
         args = arg.split()
         if not args:
             print("** class name missing **")
