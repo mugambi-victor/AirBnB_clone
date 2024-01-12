@@ -49,7 +49,10 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(result_dict['__class__'], 'BaseModel')
         self.assertEqual(result_dict['created_at'], self.obj.created_at.isoformat())
         self.assertEqual(result_dict['updated_at'], self.obj.updated_at.isoformat())
-
+    def test_str(self):
+        # Call the __str__ method and check if it returns a string
+        result_str = str(self.obj)
+        self.assertIsInstance(result_str, str)
 
 if __name__ == '__main__':
     unittest.main()
