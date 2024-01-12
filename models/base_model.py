@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime
 # from models import storage
 
+
 class BaseModel:
     """
     A base model with common attributes and methods for other classes.
@@ -28,10 +29,12 @@ class BaseModel:
                     if key in ['created_at', 'updated_at']:
                         try:
                             # Try to parse with microseconds
-                            setattr(self, key, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f'))
+                            setattr(self, key, datetime.strptime
+                                    (value, '%Y-%m-%dT%H:%M:%S.%f'))
                         except ValueError:
                             # If parsing fails, try without microseconds
-                            setattr(self, key, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S'))
+                            setattr(self, key, datetime.strptime
+                                    (value, '%Y-%m-%dT%H:%M:%S'))
                     else:
                         setattr(self, key, value)
             if 'id' not in kwargs:
