@@ -23,27 +23,25 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         if kwargs:
-            """
-            Filters out class instatiations when kwags is not provides
-            """
             for key, value in kwargs.items():
                 if key != '__class__':
                     if key in ['created_at', 'updated_at']:
-                        setattr(self, key, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f'))
-
+                        try:
+                            # Try to parse with microseconds
+                            setattr(self, key, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f'))
+                        except ValueError:
+                            # If parsing fails, try without microseconds
+                            setattr(self, key, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S'))
                     else:
                         setattr(self, key, value)
-
             if 'id' not in kwargs:
                 self.id = str(uuid.uuid4())
             if 'created_at' not in kwargs:
                 self.created_at = self.updated_at = datetime.now()
-
         else:
-            """if no kwargs were passed
-            """
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
+
     def save(self):
         """ Updates the 'updated_at' attribute with the current datetime.
         Calls the 'save' method of the storage instance.

@@ -6,6 +6,9 @@ import uuid
 from datetime import datetime
 
 class TestBaseModel(unittest.TestCase):
+    def setUp(self):
+        # Create an instance of BaseModel for testing
+        self.obj = BaseModel()
 
     def test_init(self):
         instance = BaseModel()
@@ -37,6 +40,16 @@ class TestBaseModel(unittest.TestCase):
         # Assert that the updated_at attribute has been updated
         expected_updated_at = datetime(2024, 1, 8, 12, 0, 0)
         self.assertEqual(base_model.updated_at, expected_updated_at)
+    def test_to_dict(self):
+        # Call the to_dict method and check the returned dictionary
+        result_dict = self.obj.to_dict()
+
+        # Assertions to check the content of the dictionary
+        self.assertIsInstance(result_dict, dict)
+        self.assertEqual(result_dict['__class__'], 'BaseModel')
+        self.assertEqual(result_dict['created_at'], self.obj.created_at.isoformat())
+        self.assertEqual(result_dict['updated_at'], self.obj.updated_at.isoformat())
+
 
 if __name__ == '__main__':
     unittest.main()
