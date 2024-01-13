@@ -130,6 +130,43 @@ class HBNBCommand(cmd.Cmd):
         instance = models.storage.all()[key]
         setattr(instance, attribute_name, attribute_value)
         instance.save()
+    
+    def default(self, arg):
+        """
+        Default behavior for cmd module when input is invalid
+        """
+        argument_list = arg.split('.')
+
+        classs_name = argument_list[0]  # incoming class name
+        command = argument_list[1].split('(')
+        cmd_method = command[0]  # incoming command method
+        e_arg = command[1].split(')')[0]  # extra arguments
+        method_dict = {
+                'all': self.do_all,
+                'show': self.do_show,
+                'destroy': self.do_destroy,
+                'update': self.do_update,
+                }
+        if cmd_method in method_dict.keys():
+            if cmd_method == "all" and e_arg == "":
+                # Handle the case of "<class name>.all()"
+                return self.do_all(classs_name)
+            elif cmd_method != "update":
+                return method_dict[cmd_method]("{} {}".format(classs_name, e_arg))
+            else:
+                if not classs_name:
+                    print("** class name missing **")
+                    return
+                
+                try:
+                    call = method_dict[cmd_method]
+                    return call("{} {}".format(classs_name, e_arg))
+                except Exception:
+                    pass
+        else:
+            print("*** Unknown syntax: {}".format(arg))
+            return False
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

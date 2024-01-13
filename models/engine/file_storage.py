@@ -32,11 +32,16 @@ class FileStorage:
     def get_file_path(self):
         return self.__file_path
 
-    def all(self):
+    def all(self, cls=None):
         """
-        Returns the dictionary containing all objects (__objects).
+        Returns a dictionary of all objects of a given class.
+        If cls is None, returns all objects.
         """
-        return self.__objects
+        if cls is None:
+            return self.__objects
+
+        key_prefix = "{}.".format(cls.__name__)
+        return {key: obj for key, obj in self.__objects.items() if key.startswith(key_prefix)}
 
     def new(self, obj):
         """
