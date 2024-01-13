@@ -14,13 +14,18 @@ from models.review import Review
 from models.state import State
 from models.base_model import BaseModel
 
+
 class HBNBCommand(cmd.Cmd):
     """
     class definition for the entry point for the command interpreter
     """
 
     prompt = '(hbnb)'
-    valid_classes = ["BaseModel", "City", "Amenity", "Review", "Place", "State", "User"]  # Add other valid classes as needed
+    valid_classes = [
+            "BaseModel", "City",
+            "Amenity", "Review",
+            "Place", "State", "User"
+            ]
 
     def do_quit(self, arg):
         "Quit command to exit the program"
@@ -35,7 +40,9 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Creates a new instance of a specified class, saves it (to a JSON file), and prints the id."""
+        """Creates a new instance of a specified
+        class,
+        saves it (to a JSON file), and prints the id."""
         args = arg.split()
         if not args:
             print("** class name missing **")
@@ -49,7 +56,8 @@ class HBNBCommand(cmd.Cmd):
         print(new_instance.id)
 
     def do_show(self, arg):
-        """Prints the string representation of an instance based on the class name and id."""
+        """Prints the string representation of an instance
+        based on the class name and id."""
         args = arg.split()
         if not args:
             print("** class name missing **")
@@ -90,20 +98,27 @@ class HBNBCommand(cmd.Cmd):
         models.storage.save()
 
     def do_all(self, arg):
-        """Prints all string representations of all instances based on the class name."""
+        """Prints all string representations of all
+        instances based on the class name."""
         args = arg.split()
         if args and args[0] not in self.valid_classes:
             print("** class doesn't exist **")
             return
         class_name = args[0] if args else None
         if class_name:
-            instances = [str(value) for key, value in models.storage.all().items() if key.startswith(class_name + ".")]
+            instances = [
+                    str(value) for key, value in models.
+                    storage.all().items() if key.startswith(class_name + ".")]
         else:
-            instances = [str(value) for key, value in models.storage.all().items()]
+            instances = [
+                    str(value) for key, value in
+                    models.storage.all().items()
+                    ]
         print(instances)
 
     def do_update(self, arg):
-        """Updates an instance based on the class name and id by adding or updating an attribute."""
+        """Updates an instance based on the class
+        name and id by adding or updating an attribute."""
         args = arg.split()
         if not args:
             print("** class name missing **")
@@ -131,10 +146,11 @@ class HBNBCommand(cmd.Cmd):
         instance = models.storage.all()[key]
         setattr(instance, attribute_name, attribute_value)
         instance.save()
-    
+
     def default(self, arg):
         """
-        Default behavior for cmd module when input is invalid
+        Default behavior for cmd module
+        when input is invalid
         """
         argument_list = arg.split('.')
 
@@ -153,12 +169,14 @@ class HBNBCommand(cmd.Cmd):
                 # Handle the case of "<class name>.all()"
                 return self.do_all(classs_name)
             elif cmd_method != "update":
-                return method_dict[cmd_method]("{} {}".format(classs_name, e_arg))
+                return method_dict[
+                        cmd_method]("{} {}".format(
+                            classs_name, e_arg))
             else:
                 if not classs_name:
                     print("** class name missing **")
                     return
-                
+
                 try:
                     call = method_dict[cmd_method]
                     return call("{} {}".format(classs_name, e_arg))
