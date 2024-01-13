@@ -24,6 +24,8 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
+    def get_file_path(self):
+        return self.__file_path
 
     def all(self):
         """
@@ -57,7 +59,10 @@ class FileStorage:
         if exists(self.__file_path):
             with open(self.__file_path, 'r', encoding='utf-8') as file:
                 data = json.load(file)
+                self.__objects = {}
                 for key, value in data.items():
                     class_name, obj_id = key.split('.')
                     cls = globals()[class_name]
                     self.__objects[key] = cls(**value)
+        else:
+             self.__objects = {}
