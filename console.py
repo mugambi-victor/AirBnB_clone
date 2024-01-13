@@ -21,7 +21,7 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb)'
     lastcmd = ""
-    valid_classes = ["BaseModel"]  # Add other valid classes as needed
+    valid_classes = ["BaseModel","City", "Amenity","Review","Place","State", "User"]  # Add other valid classes as needed
 
     def do_quit(self, arg):
         "Quit command to exit the program"

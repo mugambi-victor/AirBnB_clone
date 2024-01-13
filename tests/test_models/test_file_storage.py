@@ -5,6 +5,7 @@ from models.user import User
 from models.engine.file_storage import FileStorage
 import os
 
+
 class TestFileStorage(unittest.TestCase):
 
     def setUp(self):
@@ -55,6 +56,7 @@ class TestFileStorage(unittest.TestCase):
         self.file_storage.reload()
         result = self.file_storage.all()
         self.assertEqual(result, {})
+
 
 if __name__ == '__main__':
     unittest.main()
