@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import unittest
 from unittest.mock import patch
 from models.base_model import BaseModel
@@ -5,6 +6,9 @@ from models.user import User
 from models.engine.file_storage import FileStorage
 import os
 
+"""
+Unit tests for FileStorage class in file_storage module.
+"""
 
 class TestFileStorage(unittest.TestCase):
 

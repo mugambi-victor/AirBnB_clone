@@ -13,6 +13,10 @@ from models.state import State
 from models.base_model import BaseModel
 from console import HBNBCommand
 
+"""
+Unit tests for HBNBCommand class in console module.
+"""
+
 
 class TestConsoleCommands(unittest.TestCase):
 

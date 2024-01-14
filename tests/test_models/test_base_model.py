@@ -4,6 +4,10 @@ from unittest.mock import patch
 from models.base_model import BaseModel
 import uuid
 from datetime import datetime
+"""
+Unit tests for BaseModel class from base_model module.
+"""
+
 
 class TestBaseModel(unittest.TestCase):
     def setUp(self):
