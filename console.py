@@ -135,6 +135,7 @@ class HBNBCommand(cmd.Cmd):
         if key not in models.storage.all():
             print("** no instance found **")
             return
+        instance = models.storage.all()[key]
         if len(args) < 3:
             print("** attribute name missing **")
             return
@@ -143,7 +144,6 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
         attribute_value = args[3]
-        instance = models.storage.all()[key]
         setattr(instance, attribute_name, attribute_value)
         instance.save()
 
