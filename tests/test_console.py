@@ -111,12 +111,15 @@ class TestConsoleCommands(unittest.TestCase):
                         'update User {} name "John"'.
                         format(user_id)
                         )
-                updated_user = models.storage._FileStorage__objects.get("User.{}".format(user_id))
+                updated_user = models.storage._FileStorage__objects.get(
+                    "User.{}".format(user_id))
 
                 # Remove double quotes from the actual value for comparison
                 actual_name = getattr(updated_user, 'name', None)
                 if actual_name is not None and isinstance(
-                        actual_name, str) and actual_name.startswith('"') and actual_name.endswith('"'):
+                        actual_name, str
+                        ) and actual_name.startswith(
+                            '"') and actual_name.endswith('"'):
                     actual_name = actual_name[1:-1]
 
                 self.assertEqual(actual_name, "John")

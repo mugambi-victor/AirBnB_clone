@@ -30,6 +30,7 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
+
     def get_file_path(self):
         return self.__file_path
 
@@ -42,7 +43,10 @@ class FileStorage:
             return self.__objects
 
         key_prefix = "{}.".format(cls.__name__)
-        return {key: obj for key, obj in self.__objects.items() if key.startswith(key_prefix)}
+        return {
+            key: obj for key, obj in self.__objects.items()
+            if key.startswith(key_prefix)
+            }
 
     def new(self, obj):
         """
@@ -76,4 +80,4 @@ class FileStorage:
                     cls = globals()[class_name]
                     self.__objects[key] = cls(**value)
         else:
-             self.__objects = {}
+            self.__objects = {}

@@ -168,7 +168,7 @@ class HBNBCommand(cmd.Cmd):
         argument_list = arg.split('.')
 
         classs_name = argument_list[0]  # incoming class name
-        if len(argument_list) < 2 :
+        if len(argument_list) < 2:
             print("** Invalid class name: {}".format(classs_name))
             return False
         command = argument_list[1].split('(')
