@@ -5,6 +5,7 @@ form the prompt
 """
 
 import cmd
+import re
 import models
 from models.user import User
 from models.amenity import Amenity
@@ -69,7 +70,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 2:
             print("** instance id missing **")
             return
-        instance_id = args[1]
+        instance_id = args[1].strip('\"')
         key = "{}.{}".format(class_name, instance_id)
         if key not in models.storage.all():
             print("** no instance found **")
@@ -89,7 +90,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 2:
             print("** instance id missing **")
             return
-        instance_id = args[1]
+        instance_id = args[1].strip('\"')
         key = "{}.{}".format(class_name, instance_id)
         if key not in models.storage.all():
             print("** no instance found **")
@@ -119,32 +120,29 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates an instance based on the class
         name and id by adding or updating an attribute."""
-        args = arg.split()
-        if not args:
-            print("** class name missing **")
+        # Extract class name, instance id, attribute name, and attribute value
+        match = re.match(r'^(\w+)\.update\(([^,]+),\s*(\w+),\s*(.+)\)$', arg)
+        if not match:
+            print("** invalid command format **")
             return
-        class_name = args[0]
+
+        groups = match.groups()
+        class_name, instance_id, attribute_name, attribute_value = groups
+
         if class_name not in self.valid_classes:
             print("** class doesn't exist **")
             return
-        if len(args) < 2:
-            print("** instance id missing **")
-            return
-        instance_id = args[1]
+
+        instance_id = instance_id.strip('\"')
         key = "{}.{}".format(class_name, instance_id)
+
         if key not in models.storage.all():
             print("** no instance found **")
             return
+
         instance = models.storage.all()[key]
-        if len(args) < 3:
-            print("** attribute name missing **")
-            return
-        attribute_name = args[2]
-        if len(args) < 4:
-            print("** value missing **")
-            return
-        attribute_value = args[3].strip('\"')
-        setattr(instance, attribute_name, attribute_value)
+
+        setattr(instance, attribute_name, attribute_value.strip('\"'))
         instance.save()
 
     def do_count(self, arg):
