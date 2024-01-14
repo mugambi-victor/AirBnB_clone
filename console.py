@@ -168,6 +168,9 @@ class HBNBCommand(cmd.Cmd):
         argument_list = arg.split('.')
 
         classs_name = argument_list[0]  # incoming class name
+        if len(argument_list) < 2 :
+            print("** Invalid class name: {}".format(classs_name))
+            return False
         command = argument_list[1].split('(')
         cmd_method = command[0]  # incoming command method
         e_arg = command[1].split(')')[0]  # extra arguments
@@ -178,6 +181,7 @@ class HBNBCommand(cmd.Cmd):
                 'update': self.do_update,
                 'count': self.do_count
                 }
+
         if cmd_method in method_dict.keys():
             if cmd_method == "all" and e_arg == "":
                 # Handle the case of "<class name>.all()"
