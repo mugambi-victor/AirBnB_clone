@@ -13,6 +13,7 @@ from models.state import State
 from models.base_model import BaseModel
 from console import HBNBCommand
 
+
 class TestConsoleCommands(unittest.TestCase):
 
     def setUp(self):
@@ -41,17 +42,27 @@ class TestConsoleCommands(unittest.TestCase):
             with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
                 self.hbnb_command.onecmd("create User")
                 user_id = mock_stdout.getvalue().strip()
-                self.assertTrue(models.storage._FileStorage__objects.get("User.{}".format(user_id)))
+                self.assertTrue(
+                        models.storage._FileStorage__objects.
+                        get("User.{}".format(user_id)))
 
     def test_destroy_command_with_valid_input(self):
         user = User()
         user_id = user.id
         models.storage._FileStorage__objects["User.{}".format(user_id)] = user
 
-        with patch('builtins.input', return_value='destroy User {}'.format(user_id)):
-            with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch(
+                'builtins.input',
+                return_value='destroy User {}'.
+                format(user_id)):
+            with patch(
+                    'sys.stdout',
+                    new_callable=StringIO) as mock_stdout:
                 self.hbnb_command.onecmd("destroy User {}".format(user_id))
-                self.assertIsNone(models.storage._FileStorage__objects.get("User.{}".format(user_id)))
+                self.assertIsNone(
+                        models.storage._FileStorage__objects.
+                        get("User.{}".format(user_id))
+                        )
 
     def test_destroy_command_with_missing_class_name(self):
         with patch('builtins.input', return_value='destroy'):
@@ -63,8 +74,10 @@ class TestConsoleCommands(unittest.TestCase):
     def test_all_command(self):
         user1 = User()
         user2 = User()
-        models.storage._FileStorage__objects["User.{}".format(user1.id)] = user1
-        models.storage._FileStorage__objects["User.{}".format(user2.id)] = user2
+        models.storage._FileStorage__objects[
+                "User.{}".format(user1.id)] = user1
+        models.storage._FileStorage__objects[
+                "User.{}".format(user2.id)] = user2
 
         with patch('builtins.input', return_value='all User'):
             with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
@@ -85,14 +98,21 @@ class TestConsoleCommands(unittest.TestCase):
         user_id = user.id
         models.storage._FileStorage__objects["User.{}".format(user_id)] = user
 
-        with patch('builtins.input', return_value='update User {} name "John"'.format(user_id)):
+        with patch(
+                'builtins.input',
+                return_value='update User {} name "John"'.
+                format(user_id)):
             with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
-                self.hbnb_command.onecmd('update User {} name "John"'.format(user_id))
+                self.hbnb_command.onecmd(
+                        'update User {} name "John"'.
+                        format(user_id)
+                        )
                 updated_user = models.storage._FileStorage__objects.get("User.{}".format(user_id))
 
                 # Remove double quotes from the actual value for comparison
                 actual_name = getattr(updated_user, 'name', None)
-                if actual_name is not None and isinstance(actual_name, str) and actual_name.startswith('"') and actual_name.endswith('"'):
+                if actual_name is not None and isinstance(
+                        actual_name, str) and actual_name.startswith('"') and actual_name.endswith('"'):
                     actual_name = actual_name[1:-1]
 
                 self.assertEqual(actual_name, "John")
@@ -107,8 +127,10 @@ class TestConsoleCommands(unittest.TestCase):
     def test_count_command(self):
         user1 = User()
         user2 = User()
-        models.storage._FileStorage__objects["User.{}".format(user1.id)] = user1
-        models.storage._FileStorage__objects["User.{}".format(user2.id)] = user2
+        models.storage._FileStorage__objects[
+                "User.{}".format(user1.id)] = user1
+        models.storage. _FileStorage__objects[
+                "User.{}".format(user2.id)] = user2
 
         with patch('builtins.input', return_value='count User'):
             with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
@@ -122,6 +144,7 @@ class TestConsoleCommands(unittest.TestCase):
                 self.hbnb_command.onecmd("count NonExistingClass")
                 output = mock_stdout.getvalue().strip()
                 self.assertEqual(output, "** class doesn't exist **")
+
 
 if __name__ == '__main__':
     unittest.main()
