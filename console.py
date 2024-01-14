@@ -119,34 +119,33 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates an instance based on the class
         name and id by adding or updating an attribute."""
+        if self.my_errors(arg, 4) == 1:
+            return
         args = arg.split()
-        if not args:
-            print("** class name missing **")
-            return
-        class_name = args[0]
-        if class_name not in self.valid_classes:
-            print("** class doesn't exist **")
-            return
-        if len(args) < 2:
-            print("** instance id missing **")
-            return
-        instance_id = args[1]
-        key = "{}.{}".format(class_name, instance_id)
-        if key not in models.storage.all():
-            print("** no instance found **")
-            return
-        instance = models.storage.all()[key]
-        if len(args) < 3:
-            print("** attribute name missing **")
-            return
-        attribute_name = args[2]
-        if len(args) < 4:
-            print("** value missing **")
-            return
-        attribute_value = args[3]
-        setattr(instance, attribute_name, attribute_value)
-        instance.save()
-
+        d = models.storage.all()
+        for arg in args[1:]:
+            if arg[0] == '"':
+                arg = arg.replace('"', "")
+        key = args[0] + '.' + args[1]
+        attr_k = args[2]
+        attr_v = args[3]
+        try:
+            if attr_v.isdigit():
+                attr_v = int(attr_v)
+            elif "." in attr_v:
+                attr_v = float(attr_v)
+        except ValueError:
+            pass
+        class_attr = type(d[key]).__dict__
+        if attr_k in class_attr.keys():
+            try:
+                attr_v = type(class_attr[attr_k])(attr_v)
+            except Exception:
+                print("Entered wrong value type")
+                return
+        setattr(d[key], attr_k, attr_v)
+        d[key].save()
+        
     def do_count(self, arg):
         """Counts the number of instances of a class."""
         class_name = arg.split()[0]
