@@ -147,6 +147,19 @@ class HBNBCommand(cmd.Cmd):
         setattr(instance, attribute_name, attribute_value)
         instance.save()
 
+    def do_count(self, arg):
+        """Counts the number of instances of a class."""
+        class_name = arg.split()[0]
+        if class_name not in self.valid_classes:
+            print("** class doesn't exist **")
+            return
+        instances = [
+                value for key, value in
+                models.storage.all().items()
+                if key.startswith(class_name + ".")
+                ]
+        print(len(instances))
+
     def default(self, arg):
         """
         Default behavior for cmd module
@@ -163,6 +176,7 @@ class HBNBCommand(cmd.Cmd):
                 'show': self.do_show,
                 'destroy': self.do_destroy,
                 'update': self.do_update,
+                'count': self.do_count
                 }
         if cmd_method in method_dict.keys():
             if cmd_method == "all" and e_arg == "":
