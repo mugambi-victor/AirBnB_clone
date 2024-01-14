@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-This module holds the contens of the class User
+This module holds the contens of the class User.
 """
 
 from models.base_model import BaseModel
