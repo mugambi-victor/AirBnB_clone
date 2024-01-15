@@ -122,39 +122,50 @@ class HBNBCommand(cmd.Cmd):
         """Updates an instance based on the class
         name and id by adding or updating an attribute."""
         # Split the command using shlex
+        
+        def do_update(self, arg):
+            """Updates an instance based on the class
+            name and id by adding or updating an attribute."""
+            # Split the command using shlex
+            commands = shlex.split(arg)
+            if not commands:
+                print("** class name missing **")
+                return
+            if len(commands) == 1:
+                print("** class name missing **")
+                return
 
-        commands = shlex.split(arg)
-        if not commands:
-            print("** class name missing **")
-            return
-        if len(commands) == 1:
-            print("** class name missing **")
-        # Check if the command has the expected formats
-        if len(commands) == 4 and commands[0] in self.valid_classes:
-            # Extract information from the command like before
-            class_name = commands[0]
-            instance_id = commands[1]
-            attribute_name = commands[2]
-            attribute_value = commands[3]
-        elif len(commands) == 3 and commands[0].endswith('.update('):
-            # Extract information from the command
-            class_name, instance_id, attribute_name,
-            attribute_value = self.extract_info(commands[0])
+            # Check if the command has the expected format
+            if len(commands) == 3 and commands[0].endswith('.update('):
+                # Extract information from the command
+                class_name, instance_id, attr_dict_str = self.extract_info(commands[0])
 
-        else:
-            print("** invalid command format **")
-            return
+                try:
+                    # Adjust the handling of braces
+                    if attr_dict_str.startswith("{") and attr_dict_str.endswith("}"):
+                        attr_dict = eval(attr_dict_str)
+                        if not isinstance(attr_dict, dict):
+                            raise ValueError("Invalid dictionary format")
+                    else:
+                        raise ValueError("Invalid dictionary format")
+                except (SyntaxError, ValueError):
+                    print("** invalid dictionary format **")
+                    return
 
-        key = "{}.{}".format(class_name, instance_id)
-
-        if key not in models.storage.all():
-            print("** no instance found **")
-            return
-
-        instance = models.storage.all()[key]
-
-        setattr(instance, attribute_name, attribute_value)
-        instance.save()
+                # Now you have a dictionary representation to update the instance
+                key = "{}.{}".format(class_name, instance_id)
+                if key in models.storage.all():
+                    instance = models.storage.all()[key]
+                    for key, value in attr_dict.items():
+                        setattr(instance, key, value)
+                    instance.save()
+                    return
+                else:
+                    print("** no instance found **")
+                    return
+            else:
+                print("** invalid command format **")
+                return
 
     def do_count(self, arg):
         """Counts the number of instances of a class."""
