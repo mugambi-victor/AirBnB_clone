@@ -9,4 +9,4 @@ class State(BaseModel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = ""
+        self.name = kwargs.get('name', "")

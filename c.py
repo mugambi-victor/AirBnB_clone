@@ -6,7 +6,6 @@ form the prompt
 
 import cmd
 import re
-import shlex
 import models
 from models.user import User
 from models.amenity import Amenity
@@ -121,30 +120,20 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates an instance based on the class
         name and id by adding or updating an attribute."""
-        # Split the command using shlex
-
-        commands = shlex.split(arg)
-        if not commands:
-            print("** class name missing **")
-            return
-        if len(commands) == 1:
-            print("** class name missing **")
-        # Check if the command has the expected formats
-        if len(commands) == 4 and commands[0] in self.valid_classes:
-            # Extract information from the command like before
-            class_name = commands[0]
-            instance_id = commands[1]
-            attribute_name = commands[2]
-            attribute_value = commands[3]
-        elif len(commands) == 3 and commands[0].endswith('.update('):
-            # Extract information from the command
-            class_name, instance_id, attribute_name,
-            attribute_value = self.extract_info(commands[0])
-
-        else:
+        # Extract class name, instance id, attribute name, and attribute value
+        match = re.match(r'^(\w+)\.update\(([^,]+),\s*(\w+),\s*(.+)\)$', arg)
+        if not match:
             print("** invalid command format **")
             return
 
+        groups = match.groups()
+        class_name, instance_id, attribute_name, attribute_value = groups
+
+        if class_name not in self.valid_classes:
+            print("** class doesn't exist **")
+            return
+
+        instance_id = instance_id.strip('\"')
         key = "{}.{}".format(class_name, instance_id)
 
         if key not in models.storage.all():
@@ -153,7 +142,7 @@ class HBNBCommand(cmd.Cmd):
 
         instance = models.storage.all()[key]
 
-        setattr(instance, attribute_name, attribute_value)
+        setattr(instance, attribute_name, attribute_value.strip('\"'))
         instance.save()
 
     def do_count(self, arg):
@@ -174,43 +163,15 @@ class HBNBCommand(cmd.Cmd):
         Default behavior for cmd module
         when input is invalid
         """
-        """User.update(<id><attribute name> <value>)"""
         argument_list = arg.split('.')
-        """
-        After the split method, we will have:
-        argument_list[0]->User
-        argument_list[1]->update(<id><attribute name> <value>)]
-        Hence we need to further split the arg[1]
-        ([update(<id><attribute name> <value>)]) further
-        """
+
         classs_name = argument_list[0]  # incoming class name
         if len(argument_list) < 2:
             print("** Invalid class name: {}".format(classs_name))
             return False
-        """
-        We split argument_list[1] using the opening bracket(() as delimeter.
-        now we will have:
-        argument_list[1][0]->update
-        argument_list[1][1]-><id><attribute name> <value>)
-        """
         command = argument_list[1].split('(')
         cmd_method = command[0]  # incoming command method
-        """
-        Next we split the argument_list[1][1]
-        = <id><attribute name> <value>) using closing bracket as delimeter.
-        when we do this we remain with <id><attribute name> <value>"""
-        """
-        extra arguments <id><attribute name>
-        <value>and pick item at index 0 which will
-        be the <id>,<attribute name>, <value>
-        """
-        e_arg = command[1].split(')')[0]
-        all_args = e_arg.split(',')
-        """
-        all_args[0]->id
-        all_args[1]->attribute_name
-        all_args[2]->value
-        """
+        e_arg = command[1].split(')')[0]  # extra arguments
         method_dict = {
                 'all': self.do_all,
                 'show': self.do_show,
@@ -227,14 +188,6 @@ class HBNBCommand(cmd.Cmd):
                 return method_dict[
                         cmd_method]("{} {}".format(
                             classs_name, e_arg))
-            elif cmd_method == "update":
-                obj_id = all_args[0]
-                attribute_name = all_args[1]
-                attribute_value = all_args[2]
-                return method_dict[
-                        cmd_method]("{} {} {} {}".format(
-                            classs_name, obj_id, attribute_name,
-                            attribute_value))
             else:
                 if not classs_name:
                     print("** class name missing **")
@@ -252,3 +205,4 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
+
