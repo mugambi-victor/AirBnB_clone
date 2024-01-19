@@ -1,0 +1,16 @@
+/* color: white
+height: 70px
+width: 100%
+border bottom 1px #CCCCCC
+logo align on left and center vertically (20px space at the left) */
+
+header{
+    color:white;
+    height: 70px;
+    width: 100%;
+    border-bottom:1px #CCCCCC ;
+    background: url("../images/logo.png");
+    background-repeat: no-repeat;
+    background-position: 20px;
+    background-color: white;
+}
