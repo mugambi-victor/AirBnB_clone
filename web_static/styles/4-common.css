@@ -1,0 +1,16 @@
+/* no margin
+no padding
+font color: #484848
+font size: 14px
+font family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
+icon in the browser tab */
+body{
+    padding: 0;
+    margin: 0;
+    color:#484848 ;
+    font-size: 14px;
+    font-family:Circular,"Helvetica Neue",Helvetica,Arial,sans-serif ;
+}
+.container{
+    max-width: 1000px;
+}

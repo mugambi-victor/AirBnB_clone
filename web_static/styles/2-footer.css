@@ -5,9 +5,10 @@ footer {
     text-align: center;
     position: fixed;
     bottom: 0;
-    p {
-      color: white;
-      line-height: 60px;
-      margin: 0;
-    }
+   
+  }
+ footer> p {
+    color: white;
+    line-height: 60px;
+    margin: 0;
   }

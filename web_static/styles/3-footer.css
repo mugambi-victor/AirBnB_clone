@@ -15,8 +15,9 @@ footer{
     border-top:1px solid #CCCCCC ;
     bottom: 0;
     background-color: white;
-    p {
-      line-height: 60px;
-      margin: 0;
-    }
+   
+}
+footer>p {
+  line-height: 60px;
+  margin: 0;
 }
